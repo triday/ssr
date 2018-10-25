@@ -73,15 +73,14 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: 'WebProject',
             minify: false,
-            favicon: './src/images/favicon.ico',
             template: './src/template/index.html'
         }),
-        new CopyWebpackPlugin([{
-            from: path.resolve(__dirname , '../src/statics'),
-            to: output_path
-        }]
 
-        )
+        new CopyWebpackPlugin([{
+            from: path.resolve(__dirname , '../src/**/*.sr.json'),
+            to: output_path+'/i18n/[name].[ext]',
+
+        }])
     ]
 
 };
