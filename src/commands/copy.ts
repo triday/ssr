@@ -1,0 +1,1 @@
+import BaseCommand from "./base";

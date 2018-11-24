@@ -6,7 +6,9 @@ import S2Store from "./S2Store"
 export default abstract class S2Base {
 
     public locale: string;
-
+    /**
+     * 返回groupkey
+     */
     public abstract get groupKey(): string;
 
     public getSRText(srKey: string): string {

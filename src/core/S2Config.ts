@@ -1,6 +1,6 @@
 import { IS2Loader, RestS2Loader } from "./S2Loader";
 const DefaultLocaleFun: () => string = function () {
-    return "zh-CN";
+    return navigator.language;
 };
 const DefaultLoaderFactory: (groupkey: string) => IS2Loader = function (groupkey: string) {
     return RestS2Loader.Default;
