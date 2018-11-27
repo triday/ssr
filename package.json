@@ -27,7 +27,6 @@
   "homepage": "https://github.com/triday/webproject#readme",
   "sr": {
     "resBaseDir": "./src/i18n",
-    "codeBaseDir": "./src/i18n",
     "codeType": "ts",
     "fromLocale": "zh-CN",
     "targetBaseDir": "i18n"
