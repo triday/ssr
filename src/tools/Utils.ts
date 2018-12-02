@@ -46,14 +46,18 @@ export function trimExt(file: string): string {
     return currentExt.length > 0 ? file.slice(0, -currentExt.length) : file
 }
 export function getFullGroupKey(module: string, groupKey: string): string {
-    return `${module}_${groupKey}`;
-
+    return `${module}.${groupKey}`;
 }
 export function getGroupKey(path: string): string {
     return path.replace(/[\\/]/g, '.');
 }
 export function normalName(name: string): string {
-    return name.replace(/[^a-zA-Z0-9]/g, '_');
+    let res = name.replace(/[^a-zA-Z0-9]/g, '_');
+    if (res) {
+        return (res[0] >= '0' && res[0] <= '9') ? `_${res}` : res;
+    } else {
+        return '_';
+    }
 }
 export function mkdirsSync(dirname: string): void {
     if (!fs.existsSync(dirname)) {

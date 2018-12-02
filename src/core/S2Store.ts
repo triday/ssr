@@ -1,20 +1,52 @@
+export interface IS2Store {
+    getGroup(groupKey: string, localeCode: string): { [key: string]: any };
+    hasModule(moduleName: string, localeCode: string): boolean;
+    saveModule(moduleName: string, localeCode: string, datas: { [key: string]: { [key: string]: any } }): void;
+    removeModule(moduleName: string, localeCode: string): void;
+    clearLocale(localeCode: string): void;
+    clearAll(): void;
+}
 
-class Store {
-    public static Instance = new Store();
-    private caches: { [key: string]: { [key: string]: string; } } = {};
-    private constructor() {
+export class MemoryStore implements IS2Store {
+
+    public static Default: IS2Store = new MemoryStore();
+    public rootObject: any = {};
+    constructor(public host: any = window || {}, public rootKey: string = 'i18n') {
+        this.host[this.rootKey] = this.rootObject = {};
     }
-    pickGroup(groupKey: string, localeCode: string): { [key: string]: string; } {
-        let cacheKey = `${groupKey}#${localeCode}`;
-        return this.caches[cacheKey] || {};
+    removeModule(moduleName: string, localeCode: string): void {
+        let localeNode = this.rootObject[localeCode];
+        if (localeNode) {
+            delete localeNode[moduleName];
+        }
     }
-    storeGroup(groupKey: string, localeCode: string, datas: { [key: string]: string; }): void {
-        let cacheKey = `${groupKey}#${localeCode}`;
-        this.caches[cacheKey] = datas;
+    saveModule(moduleName: string, localeCode: string, datas: { [key: string]: { [key: string]: any; }; }): void {
+
+        this.rootObject[localeCode]=this.rootObject[localeCode]||{}
+        this.rootObject[localeCode][moduleName] = datas || {};
     }
-    hasGroup(groupKey: string, localeCode: string) {
-        let cacheKey = `${groupKey}#${localeCode}`;
-        return cacheKey in caches;
+    hasModule(moduleName: string, localeCode: string): boolean {
+        let localeNode = this.rootObject[localeCode];
+        if (!localeNode) return null;
+        return moduleName in localeNode;
+    }
+    getGroup(groupKey: string, localeCode: string): { [key: string]: string } {
+        let localeNode = this.rootObject[localeCode];
+        if (!localeNode) return null;
+        let moduleNode = localeNode[this.getModuleNameFromGroupKey(groupKey)];
+        if (!moduleNode) return null;
+        return moduleNode[groupKey];
+    }
+
+    clearLocale(localeCode: string): void {
+        delete this.rootObject[localeCode];
+    }
+
+    clearAll(): void {
+        this.host[this.rootKey] = this.rootObject = {};
+    }
+
+    private getModuleNameFromGroupKey(groupKey: string): string {
+        return (groupKey || '').split('.')[0];
     }
 }
-export default Store.Instance

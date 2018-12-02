@@ -1,28 +1,26 @@
 
 import "tsharp"
 import S2Config from "./S2Config"
-import S2Store from "./S2Store"
+
 
 export default abstract class S2Base {
-
-    public locale: string;
     /**
      * 返回groupkey
      */
     public abstract get groupKey(): string;
 
-    public getSRText(srKey: string): string {
-        return this.getSRTextInternal(this.groupKey, srKey, this.locale || S2Config.getConfigLocale() || '');
+    public getSRValue(srKey: string): any {
+        return this.getSRValueInternal(this.groupKey, srKey, S2Config.getConfigLocale());
     }
-    private getSRTextInternal(groupKey: string, srKey: string, localeCode: string): string {
+    private getSRValueInternal(groupKey: string, srKey: string, localeCode: string): any {
         let allLocales = this.getAllLocalesCodes(localeCode);
         for (let i = 0; i < allLocales.length; i++) {
-            let obj = S2Store.pickGroup(groupKey, allLocales[i]);
-            if (srKey in obj) {
+            let obj = S2Config.Store.getGroup(groupKey, allLocales[i]);
+            if (obj && srKey in obj) {
                 return obj[srKey];
             }
         }
-        return `!${srKey}`;
+        console.warn(`can not find key ['${srKey}'] in group ['${groupKey}'].`);
     }
     private getAllLocalesCodes(localeCode: string): string[] {
         let res: string[] = [];
@@ -33,8 +31,11 @@ export default abstract class S2Base {
         res.push(localeCode);
         return res.reverse();
     }
-    protected format_args(fmt: string, ...args: any[]): string {
-        return String.format(fmt, args);
+    protected formatSRValueWithArgs(srKey: string, args: any): string {
+        return String.format(this.getSRValue(srKey), args);
     }
+
+
+
 
 }

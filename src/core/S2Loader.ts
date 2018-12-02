@@ -1,13 +1,27 @@
+import "tsharp";
 
 export interface IS2Loader {
-    loadGroup(groupKey: string, localeCode: string): Promise<{ [key: string]: string }>
+    loadGroups(module: string, locale: string): Promise<{ [key: string]: { [key: string]: any } }>
 }
-export class RestS2Loader implements IS2Loader{
-    public static Default:RestS2Loader=new RestS2Loader();
+export class RestS2Loader implements IS2Loader {
 
-    loadGroup(groupKey: string, localeCode: string): Promise<{ [key: string]: string; }> {
-        let fileName = [groupKey, localeCode, 'sr.json'].filter(p => p).join('.');
-        let path = `/i18n/${fileName}`;
-        return fetch(path).then(res=>res.json());
+    constructor(public prefiex: string = 'i18n',public moduleUrlFormat = '/{prefix}/{locale}/{module}.json') {
+    }
+    public static Default: RestS2Loader = new RestS2Loader();
+
+    loadGroups(module: string, locale: string): Promise<{ [key: string]: { [key: string]: any } }> {
+        let args = {
+            prefiex: this.prefiex,
+            module: module,
+            locale: locale
+        };
+        let path = String.format(this.moduleUrlFormat, args).replace('//', '/');
+        return fetch(path).then(res => res.json()).then((alljson) => {
+            let resJson: { [key: string]: { [key: string]: string } } = {};
+            Object.keys(alljson).forEach(key => {
+                resJson[`${key}`] = alljson[key];
+            });
+            return resJson;
+        });
     }
 }

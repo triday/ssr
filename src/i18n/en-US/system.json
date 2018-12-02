@@ -1,0 +1,5 @@
+{
+    "confirm_delete":"Are you sure to delete user {user}?",
+    "delete_ok":"Delete user success."
+
+}

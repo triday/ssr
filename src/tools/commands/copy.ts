@@ -8,22 +8,19 @@ class CopyCommand extends BaseCommand {
         if (args.length != 1) return;
         let config = getSrConfig();
         let targetDir = path.join(args[0], config.targetBaseDir);
-        copyResource(config.resBaseDir, targetDir, config.moduleName, true, true);
+        copyResource(config.resBaseDir, targetDir, config.moduleName,config.targetBaseDir);
     }
 }
-export function copyResource(rootDir: string, targetDir: string, moduleName: string, mergeAll: boolean = true, zip: boolean = true): void {
+export function copyResource(rootDir: string, targetDir: string, moduleName: string,rootNode:string): void {
     fs.readdir(rootDir, (err, files) => {
         files.forEach((p) => {
             let file = path.join(rootDir, p);
             let stat = fs.statSync(file);
             if (stat.isDirectory()) {
-                copyLocaleResource(file)
+                copyLocaleResource(file);
             }
         })
     });
-    function getFullGroupKey(baseDir: string, filePath: string): string {
-        return utils.getFullGroupKey(moduleName, getGroupKey(baseDir, filePath));
-    }
     function getGroupKey(baseDir: string, filePath: string): string {
         let relativename = path.relative(baseDir, filePath);
         return utils.getGroupKey(utils.trimExt(relativename));
@@ -33,23 +30,38 @@ export function copyResource(rootDir: string, targetDir: string, moduleName: str
         let alljsonfile = utils.getAllJsonFiles(resourceDir);
         if (alljsonfile.length === 0) return;
         let targetlocaledir = path.join(targetDir, path.basename(resourceDir));
-        utils.mkdirsSync(targetlocaledir)
-        alljsonfile.forEach(p => {
-            let groupfileName = getFullGroupKey(resourceDir, p) + ".json";
-            let content = utils.getJsonFromFile(p);
-            utils.writeJsonToFile(content, path.join(targetlocaledir, groupfileName));
-        });
-        if (mergeAll) {
-            mergeJsonFiles(resourceDir, alljsonfile, path.join(targetlocaledir, moduleName + '.json'));
-        }
+        utils.mkdirsSync(targetlocaledir);
+
+        let jsonContent = buildJsonContent(resourceDir, alljsonfile);
+        utils.writeContentToFile(jsonContent, path.join(targetlocaledir, moduleName + '.json'));
+
+        let jsContent = buildJsContent(jsonContent, path.basename(resourceDir));
+        utils.writeContentToFile(jsContent, path.join(targetlocaledir, moduleName + '.js'))
     }
-    function mergeJsonFiles(baseDir: string, jsonFiles: string[], targetFile: string): void {
+
+    function buildJsonContent(baseDir: string, jsonFiles: string[]): string {
         let all: { [key: string]: any } = {};
         jsonFiles.forEach(p => {
             all[getGroupKey(baseDir, p)] = utils.getJsonFromFile(p);
         });
-        utils.writeJsonToFile(all, targetFile);
+        return JSON.stringify(all);
     }
+    function buildJsContent(allJson: string, locale: string): string {
+        return `(function (root, factory) {
+    if (typeof exports === 'object') {
+        module.exports = factory();
+    } else if (typeof define === 'function' && define.amd) {
+        define(factory);
+    } else {
+        root['${rootNode}'] = root['${rootNode}'] || {};
+        root['${rootNode}']['${locale}'] = root['${rootNode}']['${locale}'] || {};
+        root['${rootNode}']['${locale}']['${moduleName}'] = factory();
+    }
+})(this, function () {
+    return ${allJson};
+});`
+    }
+
 }
 
 export default new CopyCommand();

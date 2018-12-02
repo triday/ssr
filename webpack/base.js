@@ -13,6 +13,10 @@ module.exports = {
         'sr':'./src/sr.ts',
         'index': './src/index.ts',
     },
+    node:{
+        'fs':"empty",
+        'path':"empty"
+    },
     output: {
         filename: '[name].js',
         path: output_path

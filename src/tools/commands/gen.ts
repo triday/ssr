@@ -33,7 +33,7 @@ class GenCommand extends BaseCommand {
             let content = generator(className, fullGroupKey, data);
             utils.writeContentToFile(content, target);
         } catch (error) {
-            throw new Error(`gen target file [${target}]error.`);
+            throw new Error(`gen target file [${target}] error.\n${error}`);
         }
     }
 }
