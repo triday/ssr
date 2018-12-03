@@ -72,8 +72,6 @@ function generate_property(key: string, value: any): string {
             tempR = regex.exec(text)
         }
         return res;
-
-
     }
     function generate_arguments_methods(args: string[]): string {
         let items = [
@@ -100,24 +98,40 @@ function generate_property(key: string, value: any): string {
     function gentrate_array_arguments_metods(max: number): string {
         let names = Array.range(0, max + 1).select(p => `arg${p}`);
         let args_text = names.select(p => `${p}: any`).join(', ');
-        return `    public text(${args_text}): string {
+        let jsdoc = generate_jsdoc(is_string, value_type, value_desc, true);
+        let medhod_desc = `    public ${prop_name}(${args_text}): string {
         let args = [${names.join(', ')}];
         return this.format_${prop_name}(args);
     }`
+        return [jsdoc, medhod_desc].join(code.LineSplitChar);
     }
     function gentrate_object_arguments_metods(names: string[]): string {
-        return ''
+        let args_text = names.select(p => `${p}: any`).join(', ');
+        let join_text = `,${code.LineSplitChar}${String.from(' ', 12)}`;
+        let jsdoc = generate_jsdoc(is_string, value_type, value_desc, true);
+        let args_object_body = names.select(p => `${p}: ${p}`).join(join_text);
+        let medhod_desc = `    public ${prop_name}(${args_text}): string {
+        let args = {
+            ${args_object_body}
+        };
+        return this.format_${prop_name}(args);
+    }`
+        return [jsdoc, medhod_desc].join(code.LineSplitChar);
     }
     function generate_other_property(is_string: boolean, value_type: string, value_desc: string): string {
-        let otherValueDoc = `查找键为'${key}'的本地化内容。`;
-        let stringValueDoc = `查找键为'${key}'，类似 ${value_desc} 的本地化字符串。`;
+        let jsdoc = generate_jsdoc(is_string, value_type, value_desc, false);
+        let prop_desc = `    public get ${prop_name}(): ${value_type} {
+        return this.getSRValue("${key}");
+    }`
+        return [jsdoc, prop_desc].join(code.LineSplitChar);
+    }
+    function generate_jsdoc(is_string: boolean, value_type: string, value_desc: string, is_format: boolean = false): string {
+        let otherValueDoc = `获取键为 ${key} 的本地化内容。`;
+        let stringValueDoc = `获取键为 ${key} ，类似 ${value_desc} 的本地${is_format ? "格式化" : "化"}字符串。`;
         let jsdoc = `    /**
     * ${is_string ? stringValueDoc : otherValueDoc}
     */`;
-        let prop = `    public get ${prop_name}(): ${value_type} {
-        return this.getSRValue("${key}");
-    }`
-        return [jsdoc, prop].join(code.LineSplitChar);
+        return jsdoc;
     }
 }
 
