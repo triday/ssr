@@ -1,6 +1,7 @@
 import gen from "./tools/commands/gen";
 import copy from "./tools/commands/copy";
 import BaseCommand from "./tools/commands/base";
+
 const commands: { [key: string]: BaseCommand } = {
     "gen": gen,
     "copy": copy

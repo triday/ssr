@@ -1,4 +1,7 @@
-export * from "./core/S2Loader";
-export * from "./core/S2Store";
-export * from "./core/S2Config";
-export * from "./core/S2Base";
+import SRBase from "./core/SRBase";
+
+export * from "./core/SRLoader";
+export * from "./core/SRStore";
+export * from "./core/StrongRes";
+export * from "./core/SRBase";
+export default SRBase;

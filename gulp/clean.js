@@ -7,14 +7,11 @@ gulp.task('clean-deploy', function () {
 gulp.task('clean-dist', function () {
     return cleanByPattern('dist');
 });
-gulp.task('clean-d-ts',function(){
-    return cleanByPattern('src/**/*.*ss.d.ts')
-});
 
-gulp.task('clean-all',['clean-deploy','clean-dist','clean-d-ts'],function(){
+gulp.task('clean-all', ['clean-deploy', 'clean-dist'], function () {
 
 })
-function cleanByPattern (pattern) {
+function cleanByPattern(pattern) {
     return gulp.src([pattern], { read: false })
         .pipe(clean());
 }

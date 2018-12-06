@@ -1,9 +1,9 @@
 import "tsharp";
 
-export interface IS2Loader {
+export interface ISRLoader {
     loadGroups(module: string, locale: string): Promise<{ [key: string]: { [key: string]: any } }>
 }
-export class RestS2Loader implements IS2Loader {
+export class RestS2Loader implements ISRLoader {
 
     constructor(public prefiex: string = 'i18n',public moduleUrlFormat = '/{prefix}/{locale}/{module}.json') {
     }

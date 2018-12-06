@@ -1,4 +1,4 @@
-export interface IS2Store {
+export interface ISRStore {
     getGroup(groupKey: string, localeCode: string): { [key: string]: any };
     hasModule(moduleName: string, localeCode: string): boolean;
     saveModule(moduleName: string, localeCode: string, datas: { [key: string]: { [key: string]: any } }): void;
@@ -7,9 +7,9 @@ export interface IS2Store {
     clearAll(): void;
 }
 
-export class MemoryStore implements IS2Store {
+export class MemoryStore implements ISRStore {
 
-    public static Default: IS2Store = new MemoryStore();
+    public static Default: ISRStore = new MemoryStore();
     public rootObject: any = {};
     constructor(public host: any = window || {}, public rootKey: string = 'i18n') {
         this.host[this.rootKey] = this.rootObject = {};
