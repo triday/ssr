@@ -1,14 +1,12 @@
 const gulp = require('gulp');
 const clean = require('gulp-clean');
 
-gulp.task('clean-deploy', function () {
-    return cleanByPattern('deploy');
-});
-gulp.task('clean-dist', function () {
-    return cleanByPattern('dist');
+
+gulp.task('clean-lib', function () {
+    return cleanByPattern('lib');
 });
 
-gulp.task('clean-all', ['clean-deploy', 'clean-dist'], function () {
+gulp.task('clean-all', ['clean-lib'], function () {
 
 })
 function cleanByPattern(pattern) {
