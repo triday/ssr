@@ -51,8 +51,8 @@ class StrongRes {
     public Store: ISRStore = MemoryStore.Default;
 
     public getConfigLocale(): string {
-        if (typeof this.Loader === "string") {
-            return this.Loader;
+        if (typeof this.Locale === "string") {
+            return this.Locale;
         } else {
             return (this.Locale as () => string)();
         }
@@ -66,6 +66,8 @@ class StrongRes {
             this.Store.saveModule(moduleName, locale, datas);
         }
     }
-
+    public async ensureModules(...moduleNames:string[]):Promise<void>{
+        Promise.all(moduleNames.map(p=>this.ensureModule(p)));
+    }
 }
 export default new StrongRes()

@@ -32,8 +32,8 @@ export default abstract class SRBase {
      * @param srKey 指定的键。
      * @param args 格式化的参数对象。
      */
-    public formatSRValue(srKey: string, args: any): string {
-        return String.format(this.getSRValue(srKey), args);
+    public formatSRValue(srKey: string, ...args: any[]): string {
+        return String.format(this.getSRValue(srKey), ...args);
     }
     private getSRValueInternal(groupKey: string, srKey: string, localeCode: string): any {
         let allLocales = this.getAllLocalesCodes(localeCode);

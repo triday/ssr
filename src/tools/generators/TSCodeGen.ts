@@ -28,7 +28,7 @@ function generate_key_class(classname: string, data: { [key: string]: any }): st
     }).join(join_text);
     let join_text2 = `,${code.LineSplitChar}${String.from(' ', 8)}`;
     let all_prop_lines = Object.keys(data).select(p => `"${p}"`).join(join_text2);
-    return `class ${classname}Keys {
+    return `export class ${classname}Keys {
     ${static_prop_lines}
     /** 获取所有的键的名称。 */
     public static ALL: string[] = [
@@ -82,8 +82,8 @@ function generate_property(className: string, key: string, value: any): string {
     }
     function gentrate_common_arguments_metods(): string {
         let jsdoc = generate_jsdoc(is_string, value_type, value_desc, true);
-        let medhod_desc = `    public ${prop_name}(args: any): string {
-        return this.formatSRValue(${className}Keys.${prop_name}, args);
+        let medhod_desc = `    public ${prop_name}(...args: any): string {
+        return this.formatSRValue(${className}Keys.${prop_name}, ...args);
     }`
         return [jsdoc, medhod_desc].join(code.LineSplitChar);
     }
@@ -93,7 +93,7 @@ function generate_property(className: string, key: string, value: any): string {
         let jsdoc = generate_jsdoc(is_string, value_type, value_desc, true);
         let medhod_desc = `    public ${prop_name}(${args_text}): string {
         let args = [${names.join(', ')}];
-        return this.formatSRValue(${className}Keys.${prop_name}, args);
+        return this.formatSRValue(${className}Keys.${prop_name}, ...args);
     }`
         return [jsdoc, medhod_desc].join(code.LineSplitChar);
     }
@@ -131,7 +131,7 @@ function generate_class(classname: string, groupkey: string, data: { [key: strin
     const group_lines = generate_groupkey(groupkey);
     const allKey_lines = generate_allKeys(classname);
     const prop_lines = Object.keys(data).map(p => generate_property(classname, p, data[p])).join(code.LineSplitChar);
-    return `class ${classname} extends SRBase {
+    return `export class ${classname} extends SRBase {
 ${group_lines}
 ${allKey_lines}
 ${prop_lines}

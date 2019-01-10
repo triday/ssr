@@ -58,8 +58,8 @@ function generate_property(className: string, key: string, value: any): string {
     }
     function gentrate_common_arguments_metods(): string {
         let jsdoc = generate_jsdoc(is_string, value_desc, true);
-        let medhod_desc = `    ${prop_name}(args) {
-        return this.formatSRValue(${className}Keys.${prop_name}, args);
+        let medhod_desc = `    ${prop_name}(...args) {
+        return this.formatSRValue(${className}Keys.${prop_name}, ...args);
     }`
         return [jsdoc, medhod_desc].join(code.LineSplitChar);
     }
@@ -69,7 +69,7 @@ function generate_property(className: string, key: string, value: any): string {
         let jsdoc = generate_jsdoc(is_string, value_desc, true);
         let medhod_desc = `    ${prop_name}(${args_text}) {
         let args = [${names.join(', ')}];
-        return this.formatSRValue(${className}Keys.${prop_name}, args);
+        return this.formatSRValue(${className}Keys.${prop_name}, ...args);
     }`
         return [jsdoc, medhod_desc].join(code.LineSplitChar);
     }
@@ -106,7 +106,7 @@ function generate_property(className: string, key: string, value: any): string {
 function generate_class(classname: string, groupkey: string, data: { [key: string]: any }): string {
     const group_lines = generate_groupkey(groupkey);
     const prop_lines = Object.keys(data).map(p => generate_property(classname, p, data[p])).join(code.LineSplitChar);
-    return `class ${classname} extends ${code.PackName}.default {
+    return `export class ${classname} extends ${code.PackName}.default {
 ${group_lines}
 ${prop_lines}
 }`
@@ -120,7 +120,7 @@ ${classname}Keys.${normal_name(p)} = "${p}";`
     }).join(code.LineSplitChar);
     let join_text2 = `,${code.LineSplitChar}`;
     let all_prop_lines = Object.keys(data).select(p => `    "${p}"`).join(join_text2);
-    return `class ${classname}Keys {
+    return `export class ${classname}Keys {
 }
 ${static_prop_lines}
 /** 获取所有的键的名称。 */

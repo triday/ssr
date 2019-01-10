@@ -8,7 +8,7 @@ import "colors";
 class CopyCommand extends BaseCommand {
     run(args: string[]): void {
         let config = getSrConfig();
-        copyResource(config.resBaseDir, config.targetBaseDir, config.moduleName,config.targetBaseDir);
+        copyResource(config.resBaseDir, config.targetBaseDir, config.moduleName,"i18n");
     }
 }
 export function copyResource(rootDir: string, targetDir: string, moduleName: string,rootNode:string): void {
