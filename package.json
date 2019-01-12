@@ -1,12 +1,12 @@
 {
   "name": "strongres",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "强类型的i18n资源工具，可以根据资源文件生成typescript/javascript代码方便调用。",
   "main": "lib/index.js",
   "bin": {
     "sr": "bin/cli.js"
   },
-  "private": true,
+  "private": false,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "gulp clean-all && npx rimraf node_modules",
