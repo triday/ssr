@@ -39,6 +39,23 @@
 ```sr```
 ```sr build```
 
+
+### react例子
+```
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import SR from "strongres";
+import { Hello } from "./Hello";
+
+SR.ensureModules("testproj").then(()=>{
+    ReactDOM.render(
+        <Hello compiler="TypeScript" framework="React" />,
+        document.getElementById("example")
+    );
+});
+
+```
+
 #### Webpack配置
 ```npm i webpack-shell-plugin```
 webpack的配置如下
