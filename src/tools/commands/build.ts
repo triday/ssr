@@ -5,7 +5,7 @@ import * as path from "path";
 import * as utils from "../Utils";
 import * as log from "fancy-log";
 import "colors";
-class CopyCommand extends BaseCommand {
+class BuildCommand extends BaseCommand {
     run(args: string[]): void {
         let config = getSrConfig();
         copyResource(config.resBaseDir, config.targetBaseDir, config.moduleName,"i18n");
@@ -71,4 +71,4 @@ export function copyResource(rootDir: string, targetDir: string, moduleName: str
 
 }
 
-export default new CopyCommand();
+export default new BuildCommand();

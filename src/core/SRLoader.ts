@@ -5,7 +5,7 @@ export interface ISRLoader {
 }
 export class RestS2Loader implements ISRLoader {
 
-    constructor(public prefiex: string = 'i18n',public moduleUrlFormat = '/{prefix}/{locale}/{module}.json') {
+    constructor(public prefiex: string = 'i18n',public moduleUrlFormat = '/{prefiex}/{locale}/{module}.json') {
     }
     public static Default: RestS2Loader = new RestS2Loader();
 

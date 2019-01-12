@@ -21,15 +21,8 @@ function inc(importance) {
         .pipe(tagVersion());
 }
 function incVersion(importance) {
-    return getCurrentBranch().then((branch) => {
-        if (branch === 'dev') {
-            inc(importance)
-        } else {
-            log.error('=============================================');
-            log.error('Increase version only support in dev branch.');
-            log.error('=============================================');
-        }
-    });
+    return inc(importance);
+
 }
 
 //gulp patch     # makes v0.1.0 → v0.1.1

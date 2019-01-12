@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as code from "./Constcode";
 import * as utils from "./Utils";
+import "tsharp"
 export class SrConfig {
     moduleName: string;
     resBaseDir: string;
@@ -38,5 +39,5 @@ export function getSrConfig(): SrConfig {
     let packJsonFile = getPackageJsonFile('.');
     if (packJsonFile === '') throw new Error(`can not find '${code.PackageJsonName}' file.`)
     let packJson = utils.getJsonFromFile(packJsonFile);
-    return Object.assign({moduleName:packJson.name},DEFAULT_CONFIG,packJson.sr) as SrConfig;
+    return Object.merge({moduleName:packJson.name},DEFAULT_CONFIG,packJson.sr) as SrConfig;
 }

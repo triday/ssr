@@ -65,9 +65,10 @@ class StrongRes {
             const datas = await this.Loader.loadGroups(moduleName, locale);
             this.Store.saveModule(moduleName, locale, datas);
         }
+        
     }
-    public async ensureModules(...moduleNames:string[]):Promise<void>{
-        Promise.all(moduleNames.map(p=>this.ensureModule(p)));
+    public ensureModules(...moduleNames: string[]): Promise<void> {
+        return Promise.all(moduleNames.map(p => this.ensureModule(p))).then(p => {});
     }
 }
 export default new StrongRes()

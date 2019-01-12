@@ -1,2 +1,1 @@
-var requiredir=require("requiredir");
-requiredir('./gulp');
+require('./gulp');
