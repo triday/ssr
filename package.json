@@ -1,6 +1,6 @@
 {
   "name": "strongres",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "强类型的i18n资源工具，可以根据资源文件生成typescript/javascript代码方便调用。",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
